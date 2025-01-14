@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "521008139798",
+    "project_id": "chatapp-7bd49",
+    "storage_bucket": "chatapp-7bd49.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521008139798:android:8ca3272b8da723509eef37",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521008139798-84ap59hmelmdbf2ssjv2udh4of55heda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_app",
+            "certificate_hash": "37062670366bac2e99008741d3b782fd4f2da558"
+          }
+        },
+        {
+          "client_id": "521008139798-btaekotkel5v47dnf9q4neie3cd1hsds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_5A54Snyejmt3awoxmY5FVo7QTmVoq-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521008139798-btaekotkel5v47dnf9q4neie3cd1hsds.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
