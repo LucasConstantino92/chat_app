@@ -31,12 +31,19 @@ class _TextComposerState extends State<TextComposer> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () async {
-              final XFile? imgFile = await ImagePicker.platform
+            onPressed: () {
+              /*final XFile? imgFile = await ImagePicker.platform
                   .getImageFromSource(source: ImageSource.camera);
               if (imgFile == null) return;
               final File file = File(imgFile.path);
-              widget.sendMessage(imgFile: file);
+              widget.sendMessage(imgFile: file);*/
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Função não implementada'),
+                  backgroundColor: Colors.red,
+                ),
+              );
             },
             icon: Icon(Icons.photo_camera_outlined),
           ),
