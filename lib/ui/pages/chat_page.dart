@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:chat_app/ui/widgets/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -25,7 +29,25 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _sendMessage(String text) {
+  void _sendMessage({String? text, File? imgFile}) async {
+    Map<String, dynamic> data = {};
+
+    if (imgFile != null) {
+      UploadTask task = FirebaseStorage.instance
+          .ref()
+          .child('files')
+          .child(DateTime.now().millisecondsSinceEpoch.toString())
+          .putFile(
+            File(imgFile.path),
+          );
+
+      TaskSnapshot taskSnapshot =
+          await task.whenComplete(() => task.snapshot.ref.getDownloadURL());
+      data['imgUrl'] = await taskSnapshot.ref.getDownloadURL();
+    }
+
+    if (text != null) data['text'] = text;
+
     FirebaseFirestore.instance.collection('messages').add({
       'text': text,
     });
