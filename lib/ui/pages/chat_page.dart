@@ -37,11 +37,33 @@ class _ChatPageState extends State<ChatPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text(
-          'Chat',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          _currentUser != null
+              ? 'Olá, ${_currentUser!.displayName}'
+              : 'Chat App',
+          style: const TextStyle(color: Colors.white),
         ),
         elevation: 0,
+        actions: [
+          _currentUser != null
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    googleSignIn.signOut();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Você saiu com sucesso!'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  },
+                )
+              : Container(),
+        ],
       ),
       body: Column(
         children: [
@@ -49,6 +71,7 @@ class _ChatPageState extends State<ChatPage> {
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('messages')
+                    .orderBy('time')
                     .snapshots(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -59,15 +82,21 @@ class _ChatPageState extends State<ChatPage> {
                       );
                     default:
                       List<DocumentSnapshot> documents =
-                          snapshot.data!.docs.reversed.toList();
+                          snapshot.data!.docs.toList();
 
                       return ListView.builder(
                           itemCount: documents.length,
                           reverse: false,
                           itemBuilder: (context, index) {
-                            return ChatMessage(
-                                data: documents[index].data()
-                                    as Map<String, dynamic>);
+                            return _currentUser != null
+                                ? ChatMessage(
+                                    data: documents[index].data()
+                                        as Map<String, dynamic>,
+                                    mine: (documents[index].data()
+                                            as Map<String, dynamic>)['uid'] ==
+                                        _currentUser?.uid,
+                                  )
+                                : Container();
                           });
                   }
                 }),
@@ -94,6 +123,7 @@ class _ChatPageState extends State<ChatPage> {
       'uid': user!.uid,
       'senderName': user.displayName,
       'senderPhotoUrl': user.photoURL,
+      'time': Timestamp.now(),
     };
 
     if (imgFile != null) {
