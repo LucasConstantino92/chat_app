@@ -1,4 +1,5 @@
 import 'package:chat_app/ui/widgets/text_composer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
@@ -20,7 +21,13 @@ class _ChatPageState extends State<ChatPage> {
         ),
         elevation: 0,
       ),
-      body: TextComposer(),
+      body: TextComposer(_sendMessage),
     );
+  }
+
+  void _sendMessage(String text) {
+    FirebaseFirestore.instance.collection('messages').add({
+      'text': text,
+    });
   }
 }
