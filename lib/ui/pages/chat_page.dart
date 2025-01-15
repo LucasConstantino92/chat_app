@@ -25,7 +25,38 @@ class _ChatPageState extends State<ChatPage> {
         ),
         elevation: 0,
       ),
-      body: TextComposer(_sendMessage),
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('messages')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: const CircularProgressIndicator(),
+                      );
+                    default:
+                      List<DocumentSnapshot> documents =
+                          snapshot.data!.docs.reversed.toList();
+
+                      return ListView.builder(
+                          itemCount: documents.length,
+                          reverse: false,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(documents[index]['text']),
+                            );
+                          });
+                  }
+                }),
+          ),
+          TextComposer(_sendMessage),
+        ],
+      ),
     );
   }
 
